@@ -18,9 +18,9 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Thomas Prud'homme — Apprenti CFC Informaticien",
+  title: "Thomas Prud'homme — Links & Portfolio",
   description:
-    "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Liens, compétences et projets.",
+    "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Découvre mes projets, compétences et moyens de contact.",
   keywords: [
     "informaticien",
     "CFC",
@@ -32,12 +32,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Thomas Prud'homme — Apprenti CFC Informaticien",
     description:
-      "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique.",
+      "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Découvre mes projets, compétences et moyens de contact.",
     type: "website",
     url: "https://thomastp.ch/links",
     images: [
       {
-        url: `https://thomastp.ch/links/og-image.svg`,
+        url: `https://thomastp.ch/links/og-image.png`,
         width: 1200,
         height: 630,
         alt: "Thomas Prud'homme — Apprenti CFC Informaticien",
@@ -47,8 +47,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Thomas Prud'homme — Apprenti CFC Informaticien",
-    description: "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique.",
-    images: [`https://thomastp.ch/links/og-image.svg`],
+    description: "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Découvre mes projets, compétences et moyens de contact.",
+    images: [`https://thomastp.ch/links/og-image.png`],
   },
   icons: [
     {
