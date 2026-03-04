@@ -34,6 +34,21 @@ export const metadata: Metadata = {
     description:
       "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique.",
     type: "website",
+    url: "https://thomastp.ch/links",
+    images: [
+      {
+        url: `https://thomastp.ch/links/og-image.svg`,
+        width: 1200,
+        height: 630,
+        alt: "Thomas Prud'homme — Apprenti CFC Informaticien",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Thomas Prud'homme — Apprenti CFC Informaticien",
+    description: "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique.",
+    images: [`https://thomastp.ch/links/og-image.svg`],
   },
   icons: [
     {

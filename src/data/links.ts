@@ -3,6 +3,7 @@ export interface LinkItem {
   url: string;
   icon: 'github' | 'linkedin' | 'globe' | 'file' | 'mail' | 'whatsapp';
   isDownload?: boolean;
+  openInSelf?: boolean;
 }
 
 export const links: LinkItem[] = [
@@ -37,5 +38,6 @@ export const links: LinkItem[] = [
     // Cloudflare Worker with Turnstile CAPTCHA — see workers/wa-worker.js
     url: 'https://wa-redirect.thomastp.workers.dev',
     icon: 'whatsapp',
+    openInSelf: true,
   },
 ];

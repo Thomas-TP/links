@@ -49,6 +49,11 @@ export default function Starfield() {
 
     let animationId: number;
 
+    // Respect prefers-reduced-motion — skip all animation
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     const darkQuery = window.matchMedia('(prefers-color-scheme: dark)');
     isDarkRef.current = darkQuery.matches;
     const handleThemeChange = (e: MediaQueryListEvent) => {

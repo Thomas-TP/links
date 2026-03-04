@@ -16,12 +16,15 @@ export function useLocale(): { locale: Locale; setLocale: (l: Locale) => void; t
     }
 
     // 2. Fall back to automatic detection
+    // 'en', 'de', 'it' → English (better than French for these speakers)
+    // everything else (fr, es, pt…) → French
     const lang = navigator.language.toLowerCase();
-    if (lang.startsWith('en')) {
+    const useEnglish = lang.startsWith('en') || lang.startsWith('de') || lang.startsWith('it');
+    if (useEnglish) {
       setLocale('en');
     }
     // Update html lang attribute
-    document.documentElement.lang = lang.startsWith('en') ? 'en' : 'fr';
+    document.documentElement.lang = useEnglish ? 'en' : 'fr';
   }, []);
 
   return { locale, setLocale, t: translations[locale] };

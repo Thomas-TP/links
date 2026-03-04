@@ -17,13 +17,14 @@ export default function LinkNode({ link, t, index, variant = 'orbit' }: LinkNode
   const linkData = t.links[link.id as keyof typeof t.links];
   const label = linkData.label;
   const desc = linkData.desc;
+  const openExternal = !link.isDownload && !link.openInSelf;
 
   if (variant === 'orbit') {
     return (
       <motion.a
         href={link.url}
-        target={link.isDownload ? '_self' : '_blank'}
-        rel={link.isDownload ? undefined : 'noopener noreferrer'}
+        target={openExternal ? '_blank' : '_self'}
+        rel={openExternal ? 'noopener noreferrer' : undefined}
         download={link.isDownload || undefined}
         className="group relative flex flex-col items-center gap-2.5 cursor-pointer"
         whileHover={{ scale: 1.18 }}
@@ -53,8 +54,8 @@ export default function LinkNode({ link, t, index, variant = 'orbit' }: LinkNode
   return (
     <motion.a
       href={link.url}
-      target={link.isDownload ? '_self' : '_blank'}
-      rel={link.isDownload ? undefined : 'noopener noreferrer'}
+      target={openExternal ? '_blank' : '_self'}
+      rel={openExternal ? 'noopener noreferrer' : undefined}
       download={link.isDownload || undefined}
       className="group relative block"
       variants={{
