@@ -1,0 +1,11 @@
+name = "wa-redirect"
+main = "wa-worker.js"
+compatibility_date = "2025-01-01"
+
+# Pour utiliser un domaine personnalisé (ex: wa.thomastp.ch),
+# configure une route dans le dashboard Cloudflare Workers
+# ou décommente et adapte ce bloc :
+#
+# [[routes]]
+# pattern = "wa.thomastp.ch/*"
+# custom_domain = true

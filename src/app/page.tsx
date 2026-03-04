@@ -17,7 +17,35 @@ export default function Home() {
   }, []);
 
   if (!mounted) {
-    return <main className="min-h-screen bg-zinc-50 dark:bg-black" />;
+    return (
+      <main className="min-h-screen bg-zinc-50 dark:bg-black">
+        {/* Mobile skeleton */}
+        <div className="md:hidden flex flex-col items-center px-6 py-12 gap-8">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-28 h-28 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+            <div className="flex flex-col items-center gap-2">
+              <div className="w-44 h-6 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+              <div className="w-36 h-4 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+              <div className="w-28 h-3 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+            </div>
+            <div className="flex gap-3">
+              <div className="w-32 h-7 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+              <div className="w-36 h-7 rounded-full bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+            </div>
+          </div>
+          <div className="w-full max-w-sm flex flex-col gap-3">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="w-full h-14 rounded-2xl bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+            ))}
+          </div>
+          <div className="w-full max-w-sm h-14 rounded-2xl bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+        </div>
+        {/* Desktop skeleton */}
+        <div className="hidden md:flex items-center justify-center min-h-screen">
+          <div className="w-10 h-10 rounded-full border-2 border-zinc-300 dark:border-zinc-700 border-t-zinc-500 dark:border-t-zinc-400 animate-spin" />
+        </div>
+      </main>
+    );
   }
 
   return (

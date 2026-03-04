@@ -20,11 +20,19 @@ export default function GitHubStats({ t }: { t: Translations }) {
   const [data, setData] = useState<GitHubData | null>(null);
 
   useEffect(() => {
+    try {
+      const cached = sessionStorage.getItem('gh-stats');
+      if (cached) {
+        setData(JSON.parse(cached));
+        return;
+      }
+    } catch (_) {}
+
     fetch('https://api.github.com/users/Thomas-TP')
       .then((res) => res.json())
       .then((json) => {
         if (json && typeof json.public_repos === 'number') {
-          setData({
+          const d: GitHubData = {
             login: json.login,
             name: json.name || json.login,
             avatar_url: json.avatar_url,
@@ -32,8 +40,10 @@ export default function GitHubStats({ t }: { t: Translations }) {
             public_repos: json.public_repos,
             public_gists: json.public_gists,
             followers: json.followers,
-            following: json.following
-          });
+            following: json.following,
+          };
+          try { sessionStorage.setItem('gh-stats', JSON.stringify(d)); } catch (_) {}
+          setData(d);
         }
       })
       .catch(() => null);

@@ -34,7 +34,8 @@ export const links: LinkItem[] = [
   },
   {
     id: 'whatsapp',
-    url: 'https://wa.me/41763764551',
+    // Cloudflare Worker with Turnstile CAPTCHA — see workers/wa-worker.js
+    url: 'https://wa.thomastp.ch',
     icon: 'whatsapp',
   },
 ];
