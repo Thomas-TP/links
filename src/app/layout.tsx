@@ -50,6 +50,9 @@ export const metadata: Metadata = {
     description: "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Découvre mes projets, compétences et moyens de contact.",
     images: [`https://thomastp.ch/links/og-image.png`],
   },
+  alternates: {
+    canonical: "https://thomastp.ch/links",
+  },
   icons: [
     {
       rel: "icon",

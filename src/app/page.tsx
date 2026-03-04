@@ -7,10 +7,12 @@ import Starfield from '@/components/Starfield';
 import PhysicsConstellation from '@/components/PhysicsConstellation';
 import MobileLayout from '@/components/MobileLayout';
 import FloatingControls from '@/components/FloatingControls';
+import { useToast, ToastContainer } from '@/components/Toast';
 
 export default function Home() {
   const { t, locale, setLocale } = useLocale();
   const [mounted, setMounted] = useState(false);
+  const { toasts, show: showToast } = useToast();
 
   useEffect(() => {
     setMounted(true);
@@ -62,13 +64,15 @@ export default function Home() {
 
         {/* Desktop: physics constellation */}
         <div className="hidden md:block">
-          <PhysicsConstellation t={t} locale={locale} />
+          <PhysicsConstellation t={t} locale={locale} onDownload={(label) => showToast(locale === 'fr' ? `${label} — téléchargement démarré` : `${label} — download started`)} />
         </div>
 
         {/* Mobile: card layout */}
         <div className="md:hidden">
-          <MobileLayout t={t} locale={locale} />
+          <MobileLayout t={t} locale={locale} onDownload={(label) => showToast(locale === 'fr' ? `${label} — téléchargement démarré` : `${label} — download started`)} />
         </div>
+
+        <ToastContainer toasts={toasts} />
       </motion.main>
     </AnimatePresence>
   );

@@ -10,14 +10,19 @@ interface LinkNodeProps {
   t: Translations;
   index: number;
   variant?: 'orbit' | 'card';
+  onDownload?: (label: string) => void;
 }
 
-export default function LinkNode({ link, t, index, variant = 'orbit' }: LinkNodeProps) {
+export default function LinkNode({ link, t, index, variant = 'orbit', onDownload }: LinkNodeProps) {
   const Icon = iconMap[link.icon];
   const linkData = t.links[link.id as keyof typeof t.links];
   const label = linkData.label;
   const desc = linkData.desc;
   const openExternal = !link.isDownload && !link.openInSelf;
+
+  const handleClick = link.isDownload && onDownload
+    ? () => onDownload(label)
+    : undefined;
 
   if (variant === 'orbit') {
     return (
@@ -26,6 +31,7 @@ export default function LinkNode({ link, t, index, variant = 'orbit' }: LinkNode
         target={openExternal ? '_blank' : '_self'}
         rel={openExternal ? 'noopener noreferrer' : undefined}
         download={link.isDownload || undefined}
+        onClick={handleClick}
         className="group relative flex flex-col items-center gap-2.5 cursor-pointer"
         whileHover={{ scale: 1.18 }}
         whileTap={{ scale: 0.92 }}
@@ -57,6 +63,7 @@ export default function LinkNode({ link, t, index, variant = 'orbit' }: LinkNode
       target={openExternal ? '_blank' : '_self'}
       rel={openExternal ? 'noopener noreferrer' : undefined}
       download={link.isDownload || undefined}
+      onClick={handleClick}
       className="group relative block"
       variants={{
         hidden: { opacity: 0, y: 20 },

@@ -11,9 +11,10 @@ import type { Translations, Locale } from '@/i18n/translations';
 interface MobileLayoutProps {
   t: Translations;
   locale: Locale;
+  onDownload?: (label: string) => void;
 }
 
-export default function MobileLayout({ t, locale }: MobileLayoutProps) {
+export default function MobileLayout({ t, locale, onDownload }: MobileLayoutProps) {
   return (
     <div className="relative z-10 min-h-screen flex flex-col items-center px-6 py-12 gap-8">
       {/* Ambient gradients */}
@@ -89,7 +90,7 @@ export default function MobileLayout({ t, locale }: MobileLayoutProps) {
         }}
       >
         {links.map((link, i) => (
-          <LinkNode key={link.id} link={link} t={t} index={i} variant="card" />
+          <LinkNode key={link.id} link={link} t={t} index={i} variant="card" onDownload={onDownload} />
         ))}
       </motion.div>
 

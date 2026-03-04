@@ -77,9 +77,10 @@ function cablePath(start: Vec2, end: Vec2): string {
 interface Props {
   t: Translations;
   locale: Locale;
+  onDownload?: (label: string) => void;
 }
 
-export default function PhysicsConstellation({ t, locale }: Props) {
+export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const nodeElemsRef = useRef<(HTMLAnchorElement | HTMLDivElement | null)[]>([]);
@@ -644,7 +645,9 @@ export default function PhysicsConstellation({ t, locale }: Props) {
               onDoubleClick={() => handleDoubleClick(i)}
               onClick={(e) => {
                 if (dragDistRef.current >= 8) {
-                  e.preventDefault(); // Prevent navigation if we dragged
+                  e.preventDefault();
+                } else if (link.isDownload && onDownload) {
+                  onDownload(t.links[link.id as keyof typeof t.links].label);
                 }
               }}
             >
