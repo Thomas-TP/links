@@ -39,7 +39,7 @@ export const metadata: Metadata = {
       {
         url: `https://thomastp.ch/links/og-image.png`,
         width: 1200,
-        height: 630,
+        height: 1200,
         alt: "Thomas Prud'homme — Apprenti CFC Informaticien",
       },
     ],
