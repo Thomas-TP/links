@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Outfit, DM_Sans } from "next/font/google";
 import "./global_styles.css";
 
+const isProd = process.env.NODE_ENV === "production";
+const base = isProd ? "/links" : "";
+
 const outfit = Outfit({
   variable: "--font-outfit",
   subsets: ["latin"],
@@ -35,12 +38,12 @@ export const metadata: Metadata = {
   icons: [
     {
       rel: "icon",
-      url: "/favicon-light.svg",
+      url: `${base}/favicon-light.svg`,
       media: "(prefers-color-scheme: light)",
     },
     {
       rel: "icon",
-      url: "/favicon.svg",
+      url: `${base}/favicon.svg`,
       media: "(prefers-color-scheme: dark)",
     },
   ],
