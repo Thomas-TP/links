@@ -592,7 +592,7 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
               <div className="absolute inset-[-12px] bg-gradient-to-br from-zinc-300 to-zinc-400 dark:from-zinc-800 dark:to-zinc-700 rounded-full blur-2xl opacity-30 animate-pulse-glow" />
               <div className="relative w-36 h-36 rounded-full overflow-hidden border-2 border-white/20 dark:border-white/10 shadow-2xl bg-white/20 dark:bg-white/5 backdrop-blur-md">
                 <Image
-                  src={`${process.env.NODE_ENV === 'production' ? '/links' : ''}/memoji-nobg.webp`}
+                  src="/memoji-nobg.webp"
                   alt="Thomas Prud'homme"
                   width={144}
                   height={144}
