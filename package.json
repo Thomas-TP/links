@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate-og": "node scripts/generate-og.mjs"
+    "generate-og": "node scripts/generate-og.mjs",
+    "deploy": "next build && wrangler deploy"
   },
   "dependencies": {
     "framer-motion": "^12.34.3",
@@ -30,6 +31,7 @@
     "eslint-config-next": "16.1.6",
     "sharp": "^0.34.5",
     "tailwindcss": "^4",
-    "typescript": "6.0.0-beta"
+    "typescript": "6.0.0-beta",
+    "wrangler": "^4.129.0"
   }
 }
