@@ -1,6 +1,4 @@
-'use client';
-
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { useCallback, useState } from 'react';
 
 interface Toast {
@@ -44,13 +42,7 @@ export function ToastContainer({ toasts }: { toasts: Toast[] }) {
               viewBox="0 0 16 16"
               fill="none"
             >
-              <circle
-                cx="8"
-                cy="8"
-                r="7"
-                stroke="currentColor"
-                strokeWidth="1.5"
-              />
+              <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" />
               <path
                 d="M5 8l2 2 4-4"
                 stroke="currentColor"

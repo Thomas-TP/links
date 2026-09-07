@@ -1,7 +1,4 @@
-'use client';
-
-import { motion } from 'framer-motion';
-import Image from 'next/image';
+import { motion } from 'motion/react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getLinkUrl, links } from '@/data/links';
 import type { Locale, Translations } from '@/i18n/translations';
@@ -82,9 +79,7 @@ interface Props {
 export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const nodeElemsRef = useRef<(HTMLAnchorElement | HTMLDivElement | null)[]>(
-    [],
-  );
+  const nodeElemsRef = useRef<(HTMLAnchorElement | HTMLDivElement | null)[]>([]);
   const cableMainRef = useRef<(SVGPathElement | null)[]>([]);
   const cableGlowRef = useRef<(SVGPathElement | null)[]>([]);
   const pulseElemsRef = useRef<(SVGCircleElement | null)[][]>([]);
@@ -399,8 +394,7 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
         if (glowPath) {
           glowPath.setAttribute('d', d);
           glowPath.setAttribute('stroke-width', String(n.glowWidth));
-          glowPath.style.opacity =
-            n.entryDelay <= 0 ? String(n.glowOpacity) : '0';
+          glowPath.style.opacity = n.entryDelay <= 0 ? String(n.glowOpacity) : '0';
         }
 
         const cp = cableControl(center, vis);
@@ -410,8 +404,7 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
             const p = pulses[j];
             p.t = (p.t + p.speed * dt) % 1;
             const pt = bezierPoint(p.t, center, cp, vis);
-            const fade =
-              p.t < 0.12 ? p.t / 0.12 : p.t > 0.88 ? (1 - p.t) / 0.12 : 1;
+            const fade = p.t < 0.12 ? p.t / 0.12 : p.t > 0.88 ? (1 - p.t) / 0.12 : 1;
             const c = pulseElemsRef.current[i]?.[j];
             if (c) {
               c.setAttribute('cx', String(pt.x));
@@ -437,25 +430,22 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
 
   /* ────── Drag handlers ────── */
 
-  const handleNodePointerDown = useCallback(
-    (e: React.PointerEvent, idx: number) => {
-      // Only capture drag events for the left mouse button (0) or touch
-      if (e.button !== 0 && e.pointerType === 'mouse') return;
+  const handleNodePointerDown = useCallback((e: React.PointerEvent, idx: number) => {
+    // Only capture drag events for the left mouse button (0) or touch
+    if (e.button !== 0 && e.pointerType === 'mouse') return;
 
-      e.preventDefault();
-      e.stopPropagation();
-      (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-      dragIdxRef.current = idx;
-      lastPointerRef.current = { x: e.clientX, y: e.clientY };
-      lastPointerTimeRef.current = performance.now();
-      dragDistRef.current = 0;
-      const n = nodesRef.current[idx];
-      n.isDragging = true;
-      n.vx = 0;
-      n.vy = 0;
-    },
-    [],
-  );
+    e.preventDefault();
+    e.stopPropagation();
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+    dragIdxRef.current = idx;
+    lastPointerRef.current = { x: e.clientX, y: e.clientY };
+    lastPointerTimeRef.current = performance.now();
+    dragDistRef.current = 0;
+    const n = nodesRef.current[idx];
+    n.isDragging = true;
+    n.vx = 0;
+    n.vy = 0;
+  }, []);
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
@@ -531,10 +521,7 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
 
       {/* ── SVG cable layer ── */}
       {ready && (
-        <svg
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full pointer-events-none z-10"
-        >
+        <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none z-10">
           <defs>
             <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="var(--color-accent-purple)" />
@@ -545,20 +532,12 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
               <stop offset="100%" stopColor="var(--color-accent-cyan)" />
             </linearGradient>
             <radialGradient id="pg">
-              <stop
-                offset="0%"
-                stopColor="var(--color-accent-cyan)"
-                stopOpacity="1"
-              />
-              <stop
-                offset="100%"
-                stopColor="var(--color-accent-purple)"
-                stopOpacity="0"
-              />
+              <stop offset="0%" stopColor="var(--color-accent-cyan)" stopOpacity="1" />
+              <stop offset="100%" stopColor="var(--color-accent-purple)" stopOpacity="0" />
             </radialGradient>
           </defs>
           {links.map((_, i) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: link count is stable for the component's lifetime
+            // oxlint-disable-next-line react/no-array-index-key -- link count is stable for the component's lifetime
             <g key={i}>
               <path
                 ref={(el) => {
@@ -584,8 +563,7 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
                 <circle
                   key={j}
                   ref={(el) => {
-                    if (!pulseElemsRef.current[i])
-                      pulseElemsRef.current[i] = [];
+                    if (!pulseElemsRef.current[i]) pulseElemsRef.current[i] = [];
                     pulseElemsRef.current[i][j] = el;
                   }}
                   r="2.5"
@@ -619,13 +597,14 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
             <div ref={profileRef} className="relative">
               <div className="absolute inset-[-12px] bg-gradient-to-br from-zinc-300 to-zinc-400 dark:from-zinc-800 dark:to-zinc-700 rounded-full blur-2xl opacity-30 animate-pulse-glow" />
               <div className="relative w-36 h-36 rounded-full overflow-hidden border-2 border-white/20 dark:border-white/10 shadow-2xl bg-white/20 dark:bg-white/5 backdrop-blur-md">
-                <Image
+                <img
                   src="/memoji-nobg.webp"
                   alt="Thomas Prud'homme"
                   width={144}
                   height={144}
                   className="object-cover w-full h-full drop-shadow-md"
-                  priority
+                  loading="eager"
+                  decoding="async"
                   fetchPriority="high"
                 />
               </div>
@@ -655,16 +634,8 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
           return (
             <a
               href={url}
-              target={
-                url.startsWith('mailto:') || link.isDownload
-                  ? undefined
-                  : '_blank'
-              }
-              rel={
-                url.startsWith('mailto:') || link.isDownload
-                  ? undefined
-                  : 'noopener noreferrer'
-              }
+              target={url.startsWith('mailto:') || link.isDownload ? undefined : '_blank'}
+              rel={url.startsWith('mailto:') || link.isDownload ? undefined : 'noopener noreferrer'}
               download={link.isDownload ? '' : undefined}
               key={link.id}
               ref={(el) => {
@@ -676,8 +647,7 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
                 willChange: 'transform',
                 opacity: 0,
                 scale: '0',
-                transition:
-                  'opacity 0.4s ease, scale 0.5s cubic-bezier(.34,1.56,.64,1)',
+                transition: 'opacity 0.4s ease, scale 0.5s cubic-bezier(.34,1.56,.64,1)',
               }}
               onPointerDown={(e) => handleNodePointerDown(e, i)}
               onPointerEnter={() => handlePointerEnter(i)}
@@ -715,9 +685,7 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
         transition={{ delay: 1.8, duration: 0.6 }}
       >
         <MapPinIcon className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />
-        <span className="text-sm text-gray-700 dark:text-white/70 font-body">
-          {t.location}
-        </span>
+        <span className="text-sm text-gray-700 dark:text-white/70 font-body">{t.location}</span>
       </motion.div>
 
       <motion.div
@@ -727,9 +695,7 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
         transition={{ delay: 2, duration: 0.6 }}
       >
         <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-        <span className="text-sm text-gray-700 dark:text-white/70 font-body">
-          {t.available}
-        </span>
+        <span className="text-sm text-gray-700 dark:text-white/70 font-body">{t.available}</span>
       </motion.div>
 
       <motion.div

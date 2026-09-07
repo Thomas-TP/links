@@ -1,0 +1,43 @@
+---
+import '../styles/global.css';
+---
+
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Page non trouvée — Thomas Prud'homme</title>
+    <meta name="robots" content="noindex" />
+
+    <script is:inline>
+      try {
+        var theme = localStorage.getItem('theme-preference');
+        if (
+          theme === 'dark' ||
+          (!theme &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        ) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.add('light');
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body class="antialiased">
+    <main class="min-h-screen flex flex-col items-center justify-center gap-4 bg-zinc-50 dark:bg-black text-center px-6">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white font-heading">
+        404
+      </h1>
+      <p class="text-base text-gray-600 dark:text-white/60 font-body">
+        Page non trouvée / Page not found.
+      </p>
+      <a
+        href="/"
+        class="mt-2 px-5 py-2.5 rounded-full bg-white/80 dark:bg-white/10 backdrop-blur-xl border border-gray-200/60 dark:border-white/10 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white transition-colors font-body"
+      >
+        Retour à l'accueil / Back home
+      </a>
+    </main>
+  </body>
+</html>

@@ -1,6 +1,4 @@
-'use client';
-
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import type { Locale } from '@/i18n/translations';
 
@@ -9,19 +7,13 @@ interface FloatingControlsProps {
   onLocaleChange: (locale: Locale) => void;
 }
 
-export default function FloatingControls({
-  currentLocale,
-  onLocaleChange,
-}: FloatingControlsProps) {
+export default function FloatingControls({ currentLocale, onLocaleChange }: FloatingControlsProps) {
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [isOpen, setIsOpen] = useState(false);
 
   // Initialize theme from system preference or localStorage
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme-preference') as
-      | 'light'
-      | 'dark'
-      | null;
+    const savedTheme = localStorage.getItem('theme-preference') as 'light' | 'dark' | null;
     if (savedTheme) {
       setTheme(savedTheme);
       if (savedTheme === 'light') {

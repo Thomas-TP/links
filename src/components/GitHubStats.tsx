@@ -1,6 +1,4 @@
-'use client';
-
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import type { Translations } from '@/i18n/translations';
 import { GitHubIcon } from './Icons';

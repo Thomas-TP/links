@@ -1,6 +1,4 @@
-'use client';
-
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { getLinkUrl, type LinkItem } from '@/data/links';
 import type { Locale, Translations } from '@/i18n/translations';
 import { DownloadIcon, ExternalLinkIcon, iconMap } from './Icons';
@@ -29,8 +27,7 @@ export default function LinkNode({
   const url = getLinkUrl(link, locale);
   const openExternal = !link.isDownload && !link.openInSelf;
 
-  const handleClick =
-    link.isDownload && onDownload ? () => onDownload(label) : undefined;
+  const handleClick = link.isDownload && onDownload ? () => onDownload(label) : undefined;
 
   if (variant === 'orbit') {
     return (
@@ -94,9 +91,7 @@ export default function LinkNode({
 
           {/* Text */}
           <div className="flex-1 min-w-0">
-            <div className="font-semibold text-black dark:text-white font-heading">
-              {label}
-            </div>
+            <div className="font-semibold text-black dark:text-white font-heading">{label}</div>
             <div className="text-sm text-zinc-500 dark:text-zinc-400 truncate font-body">
               {desc}
             </div>

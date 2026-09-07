@@ -1,5 +1,3 @@
-'use client';
-
 import { useCallback, useEffect, useRef } from 'react';
 
 interface Star {
@@ -91,8 +89,7 @@ export default function Starfield() {
 
       // Draw stars
       for (const star of starsRef.current) {
-        const twinkle =
-          Math.sin(time * star.twinkleSpeed + star.twinkleOffset) * 0.35 + 0.65;
+        const twinkle = Math.sin(time * star.twinkleSpeed + star.twinkleOffset) * 0.35 + 0.65;
         const alpha = star.baseOpacity * twinkle;
 
         ctx.beginPath();
@@ -106,14 +103,7 @@ export default function Starfield() {
 
         // Glow for larger stars
         if (star.size > 1.8) {
-          const g = ctx.createRadialGradient(
-            star.x,
-            star.y,
-            0,
-            star.x,
-            star.y,
-            star.size * 5,
-          );
+          const g = ctx.createRadialGradient(star.x, star.y, 0, star.x, star.y, star.size * 5);
           if (isDark) {
             g.addColorStop(0, `rgba(124, 58, 237, ${alpha * 0.25})`);
             g.addColorStop(0.5, `rgba(6, 182, 212, ${alpha * 0.1})`);
@@ -174,7 +164,5 @@ export default function Starfield() {
     };
   }, [initStars]);
 
-  return (
-    <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />
-  );
+  return <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />;
 }

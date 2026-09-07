@@ -1,6 +1,4 @@
-'use client';
-
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useState } from 'react';
 import FloatingControls from '@/components/FloatingControls';
 import MobileLayout from '@/components/MobileLayout';
@@ -38,7 +36,7 @@ export default function Home() {
           <div className="w-full max-w-sm flex flex-col gap-3">
             {[...Array(6)].map((_, i) => (
               <div
-                // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton list, order never changes
+                // oxlint-disable-next-line no-array-index-key -- static skeleton list, order never changes
                 key={i}
                 className="w-full h-14 rounded-2xl bg-zinc-200 dark:bg-zinc-800 animate-pulse"
               />
