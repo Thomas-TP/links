@@ -1,10 +1,10 @@
 #!/usr/bin/env node
+import { dirname, join } from 'path';
 /**
  * Génère public/og-image.png — 1200×1200px (carré, universel)
  * Usage: node scripts/generate-og.mjs
  */
 import sharp from 'sharp';
-import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -113,20 +113,20 @@ const svgBg = `<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}
 /* ── Build the PNG ── */
 
 // 1. Rasterise SVG
-const bgBuffer = await sharp(Buffer.from(svgBg))
-  .resize(S, S)
-  .png()
-  .toBuffer();
+const bgBuffer = await sharp(Buffer.from(svgBg)).resize(S, S).png().toBuffer();
 
 // 2. Resize memoji — large, centred in top half (0→660)
 const memojiSize = 460;
 const memojiBuffer = await sharp(join(pub, 'memoji-nobg.webp'))
-  .resize(memojiSize, memojiSize, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+  .resize(memojiSize, memojiSize, {
+    fit: 'contain',
+    background: { r: 0, g: 0, b: 0, alpha: 0 },
+  })
   .png()
   .toBuffer();
 
-const memojiLeft = Math.round((S - memojiSize) / 2);   // 370
-const memojiTop  = Math.round((660 - memojiSize) / 2); // 100
+const memojiLeft = Math.round((S - memojiSize) / 2); // 370
+const memojiTop = Math.round((660 - memojiSize) / 2); // 100
 
 // 3. Composite and save
 await sharp(bgBuffer)

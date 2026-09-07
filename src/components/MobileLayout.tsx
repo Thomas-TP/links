@@ -2,11 +2,11 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import LinkNode from './LinkNode';
+import { links } from '@/data/links';
+import type { Locale, Translations } from '@/i18n/translations';
 import GitHubStats from './GitHubStats';
 import { MapPinIcon } from './Icons';
-import { links } from '@/data/links';
-import type { Translations, Locale } from '@/i18n/translations';
+import LinkNode from './LinkNode';
 
 interface MobileLayoutProps {
   t: Translations;
@@ -14,7 +14,11 @@ interface MobileLayoutProps {
   onDownload?: (label: string) => void;
 }
 
-export default function MobileLayout({ t, locale, onDownload }: MobileLayoutProps) {
+export default function MobileLayout({
+  t,
+  locale,
+  onDownload,
+}: MobileLayoutProps) {
   return (
     <div className="relative z-10 min-h-screen flex flex-col items-center px-6 py-12 gap-8">
       {/* Ambient gradients */}
@@ -85,12 +89,19 @@ export default function MobileLayout({ t, locale, onDownload }: MobileLayoutProp
             transition: {
               staggerChildren: 0.1,
               delayChildren: 0.3,
-            }
-          }
+            },
+          },
         }}
       >
         {links.map((link, i) => (
-          <LinkNode key={link.id} link={link} t={t} index={i} variant="card" onDownload={onDownload} />
+          <LinkNode
+            key={link.id}
+            link={link}
+            t={t}
+            index={i}
+            variant="card"
+            onDownload={onDownload}
+          />
         ))}
       </motion.div>
 

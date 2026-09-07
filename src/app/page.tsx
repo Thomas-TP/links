@@ -1,13 +1,13 @@
 'use client';
 
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useLocale } from '@/i18n/useLocale';
-import Starfield from '@/components/Starfield';
-import PhysicsConstellation from '@/components/PhysicsConstellation';
-import MobileLayout from '@/components/MobileLayout';
 import FloatingControls from '@/components/FloatingControls';
-import { useToast, ToastContainer } from '@/components/Toast';
+import MobileLayout from '@/components/MobileLayout';
+import PhysicsConstellation from '@/components/PhysicsConstellation';
+import Starfield from '@/components/Starfield';
+import { ToastContainer, useToast } from '@/components/Toast';
+import { useLocale } from '@/i18n/useLocale';
 
 export default function Home() {
   const { t, locale, setLocale } = useLocale();
@@ -37,7 +37,11 @@ export default function Home() {
           </div>
           <div className="w-full max-w-sm flex flex-col gap-3">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="w-full h-14 rounded-2xl bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
+              <div
+                // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton list, order never changes
+                key={i}
+                className="w-full h-14 rounded-2xl bg-zinc-200 dark:bg-zinc-800 animate-pulse"
+              />
             ))}
           </div>
           <div className="w-full max-w-sm h-14 rounded-2xl bg-zinc-200 dark:bg-zinc-800 animate-pulse" />
@@ -64,12 +68,32 @@ export default function Home() {
 
         {/* Desktop: physics constellation */}
         <div className="hidden md:block">
-          <PhysicsConstellation t={t} locale={locale} onDownload={(label) => showToast(locale === 'fr' ? `${label} — téléchargement démarré` : `${label} — download started`)} />
+          <PhysicsConstellation
+            t={t}
+            locale={locale}
+            onDownload={(label) =>
+              showToast(
+                locale === 'fr'
+                  ? `${label} — téléchargement démarré`
+                  : `${label} — download started`,
+              )
+            }
+          />
         </div>
 
         {/* Mobile: card layout */}
         <div className="md:hidden">
-          <MobileLayout t={t} locale={locale} onDownload={(label) => showToast(locale === 'fr' ? `${label} — téléchargement démarré` : `${label} — download started`)} />
+          <MobileLayout
+            t={t}
+            locale={locale}
+            onDownload={(label) =>
+              showToast(
+                locale === 'fr'
+                  ? `${label} — téléchargement démarré`
+                  : `${label} — download started`,
+              )
+            }
+          />
         </div>
 
         <ToastContainer toasts={toasts} />

@@ -1,19 +1,19 @@
-import type { Metadata } from "next";
-import { Outfit, DM_Sans } from "next/font/google";
-import "./global_styles.css";
+import type { Metadata } from 'next';
+import { DM_Sans, Outfit } from 'next/font/google';
+import './global_styles.css';
 
-const base = "";
+const base = '';
 
 const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
-  display: "swap",
+  variable: '--font-outfit',
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
-  subsets: ["latin"],
-  display: "swap",
+  variable: '--font-dm-sans',
+  subsets: ['latin'],
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -21,19 +21,19 @@ export const metadata: Metadata = {
   description:
     "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Découvre mes projets, compétences et moyens de contact.",
   keywords: [
-    "informaticien",
-    "CFC",
-    "apprenti",
-    "infrastructure",
-    "Suisse",
+    'informaticien',
+    'CFC',
+    'apprenti',
+    'infrastructure',
+    'Suisse',
     "Thomas Prud'homme",
   ],
   openGraph: {
     title: "Thomas Prud'homme — Apprenti CFC Informaticien",
     description:
       "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Découvre mes projets, compétences et moyens de contact.",
-    type: "website",
-    url: "https://links.thomastp.ch",
+    type: 'website',
+    url: 'https://links.thomastp.ch',
     images: [
       {
         url: `https://links.thomastp.ch/og-image.png`,
@@ -44,24 +44,25 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: 'summary_large_image',
     title: "Thomas Prud'homme — Apprenti CFC Informaticien",
-    description: "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Découvre mes projets, compétences et moyens de contact.",
+    description:
+      "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Découvre mes projets, compétences et moyens de contact.",
     images: [`https://links.thomastp.ch/og-image.png`],
   },
   alternates: {
-    canonical: "https://links.thomastp.ch",
+    canonical: 'https://links.thomastp.ch',
   },
   icons: [
     {
-      rel: "icon",
+      rel: 'icon',
       url: `${base}/favicon-light.svg`,
-      media: "(prefers-color-scheme: light)",
+      media: '(prefers-color-scheme: light)',
     },
     {
-      rel: "icon",
+      rel: 'icon',
       url: `${base}/favicon.svg`,
-      media: "(prefers-color-scheme: dark)",
+      media: '(prefers-color-scheme: dark)',
     },
   ],
 };
@@ -75,6 +76,7 @@ export default function RootLayout({
     <html lang="fr" suppressHydrationWarning>
       <head>
         <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: static inline script, no user input, needed before hydration to avoid theme flash
           dangerouslySetInnerHTML={{
             __html: `
               try {
@@ -89,9 +91,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body
-        className={`${outfit.variable} ${dmSans.variable} antialiased`}
-      >
+      <body className={`${outfit.variable} ${dmSans.variable} antialiased`}>
         {children}
       </body>
     </html>

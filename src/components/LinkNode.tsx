@@ -1,9 +1,9 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { iconMap, ExternalLinkIcon, DownloadIcon } from './Icons';
 import type { LinkItem } from '@/data/links';
 import type { Translations } from '@/i18n/translations';
+import { DownloadIcon, ExternalLinkIcon, iconMap } from './Icons';
 
 interface LinkNodeProps {
   link: LinkItem;
@@ -13,16 +13,21 @@ interface LinkNodeProps {
   onDownload?: (label: string) => void;
 }
 
-export default function LinkNode({ link, t, index, variant = 'orbit', onDownload }: LinkNodeProps) {
+export default function LinkNode({
+  link,
+  t,
+  index,
+  variant = 'orbit',
+  onDownload,
+}: LinkNodeProps) {
   const Icon = iconMap[link.icon];
   const linkData = t.links[link.id as keyof typeof t.links];
   const label = linkData.label;
   const desc = linkData.desc;
   const openExternal = !link.isDownload && !link.openInSelf;
 
-  const handleClick = link.isDownload && onDownload
-    ? () => onDownload(label)
-    : undefined;
+  const handleClick =
+    link.isDownload && onDownload ? () => onDownload(label) : undefined;
 
   if (variant === 'orbit') {
     return (
@@ -67,7 +72,11 @@ export default function LinkNode({ link, t, index, variant = 'orbit', onDownload
       className="group relative block"
       variants={{
         hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } }
+        visible: {
+          opacity: 1,
+          y: 0,
+          transition: { type: 'spring', stiffness: 100 },
+        },
       }}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.97 }}

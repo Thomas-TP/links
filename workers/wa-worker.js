@@ -102,7 +102,7 @@ export default {
             response: token,
             remoteip: request.headers.get('CF-Connecting-IP'),
           }),
-        }
+        },
       );
 
       const result = await verification.json();

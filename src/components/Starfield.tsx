@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
 interface Star {
   x: number;
@@ -107,8 +107,12 @@ export default function Starfield() {
         // Glow for larger stars
         if (star.size > 1.8) {
           const g = ctx.createRadialGradient(
-            star.x, star.y, 0,
-            star.x, star.y, star.size * 5,
+            star.x,
+            star.y,
+            0,
+            star.x,
+            star.y,
+            star.size * 5,
           );
           if (isDark) {
             g.addColorStop(0, `rgba(124, 58, 237, ${alpha * 0.25})`);
@@ -171,10 +175,6 @@ export default function Starfield() {
   }, [initStars]);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 z-0 pointer-events-none"
-      aria-hidden="true"
-    />
+    <canvas ref={canvasRef} className="fixed inset-0 z-0 pointer-events-none" />
   );
 }

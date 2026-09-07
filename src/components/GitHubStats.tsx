@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { GitHubIcon } from './Icons';
+import { useEffect, useState } from 'react';
 import type { Translations } from '@/i18n/translations';
+import { GitHubIcon } from './Icons';
 
 interface GitHubData {
   login: string;
@@ -42,7 +42,9 @@ export default function GitHubStats({ t }: { t: Translations }) {
             followers: json.followers,
             following: json.following,
           };
-          try { sessionStorage.setItem('gh-stats', JSON.stringify(d)); } catch (_) {}
+          try {
+            sessionStorage.setItem('gh-stats', JSON.stringify(d));
+          } catch (_) {}
           setData(d);
         }
       })

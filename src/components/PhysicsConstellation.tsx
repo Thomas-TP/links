@@ -1,13 +1,12 @@
 'use client';
 
-import { useRef, useState, useCallback, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
-import { iconMap } from './Icons';
-import GitHubStats from './GitHubStats';
-import { MapPinIcon } from './Icons';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { links } from '@/data/links';
-import type { Translations, Locale } from '@/i18n/translations';
+import type { Locale, Translations } from '@/i18n/translations';
+import GitHubStats from './GitHubStats';
+import { iconMap, MapPinIcon } from './Icons';
 
 /* ───────────────────── Types ───────────────────── */
 
@@ -83,7 +82,9 @@ interface Props {
 export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const nodeElemsRef = useRef<(HTMLAnchorElement | HTMLDivElement | null)[]>([]);
+  const nodeElemsRef = useRef<(HTMLAnchorElement | HTMLDivElement | null)[]>(
+    [],
+  );
   const cableMainRef = useRef<(SVGPathElement | null)[]>([]);
   const cableGlowRef = useRef<(SVGPathElement | null)[]>([]);
   const pulseElemsRef = useRef<(SVGCircleElement | null)[][]>([]);
@@ -133,7 +134,7 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
 
       const shift = {
         x: isFirst ? 0 : cx - oldCenter.x,
-        y: isFirst ? 0 : cy - oldCenter.y
+        y: isFirst ? 0 : cy - oldCenter.y,
       };
 
       centerRef.current = { x: cx, y: cy };
@@ -146,7 +147,10 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
 
       targetsRef.current = links.map((_, i) => {
         const angle = (i / links.length) * 2 * Math.PI - Math.PI / 2;
-        return { x: cx + Math.cos(angle) * radius, y: cy + Math.sin(angle) * radius };
+        return {
+          x: cx + Math.cos(angle) * radius,
+          y: cy + Math.sin(angle) * radius,
+        };
       });
 
       if (nodesRef.current.length > 0) {
@@ -395,7 +399,8 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
         if (glowPath) {
           glowPath.setAttribute('d', d);
           glowPath.setAttribute('stroke-width', String(n.glowWidth));
-          glowPath.style.opacity = n.entryDelay <= 0 ? String(n.glowOpacity) : '0';
+          glowPath.style.opacity =
+            n.entryDelay <= 0 ? String(n.glowOpacity) : '0';
         }
 
         const cp = cableControl(center, vis);
@@ -405,7 +410,8 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
             const p = pulses[j];
             p.t = (p.t + p.speed * dt) % 1;
             const pt = bezierPoint(p.t, center, cp, vis);
-            const fade = p.t < 0.12 ? p.t / 0.12 : p.t > 0.88 ? (1 - p.t) / 0.12 : 1;
+            const fade =
+              p.t < 0.12 ? p.t / 0.12 : p.t > 0.88 ? (1 - p.t) / 0.12 : 1;
             const c = pulseElemsRef.current[i]?.[j];
             if (c) {
               c.setAttribute('cx', String(pt.x));
@@ -525,7 +531,10 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
 
       {/* ── SVG cable layer ── */}
       {ready && (
-        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10">
+        <svg
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full pointer-events-none z-10"
+        >
           <defs>
             <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="var(--color-accent-purple)" />
@@ -536,14 +545,25 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
               <stop offset="100%" stopColor="var(--color-accent-cyan)" />
             </linearGradient>
             <radialGradient id="pg">
-              <stop offset="0%" stopColor="var(--color-accent-cyan)" stopOpacity="1" />
-              <stop offset="100%" stopColor="var(--color-accent-purple)" stopOpacity="0" />
+              <stop
+                offset="0%"
+                stopColor="var(--color-accent-cyan)"
+                stopOpacity="1"
+              />
+              <stop
+                offset="100%"
+                stopColor="var(--color-accent-purple)"
+                stopOpacity="0"
+              />
             </radialGradient>
           </defs>
           {links.map((_, i) => (
+            // biome-ignore lint/suspicious/noArrayIndexKey: link count is stable for the component's lifetime
             <g key={i}>
               <path
-                ref={(el) => { cableGlowRef.current[i] = el; }}
+                ref={(el) => {
+                  cableGlowRef.current[i] = el;
+                }}
                 fill="none"
                 stroke="url(#cgg)"
                 strokeWidth="6"
@@ -551,7 +571,9 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
                 style={{ opacity: 0, transition: 'none' }}
               />
               <path
-                ref={(el) => { cableMainRef.current[i] = el; }}
+                ref={(el) => {
+                  cableMainRef.current[i] = el;
+                }}
                 fill="none"
                 stroke="url(#cg)"
                 strokeWidth="1.5"
@@ -562,7 +584,8 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
                 <circle
                   key={j}
                   ref={(el) => {
-                    if (!pulseElemsRef.current[i]) pulseElemsRef.current[i] = [];
+                    if (!pulseElemsRef.current[i])
+                      pulseElemsRef.current[i] = [];
                     pulseElemsRef.current[i][j] = el;
                   }}
                   r="2.5"
@@ -584,7 +607,12 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
           <motion.div
             initial={{ opacity: 0, scale: 0.4 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, type: 'spring', stiffness: 80, damping: 14 }}
+            transition={{
+              duration: 1,
+              type: 'spring',
+              stiffness: 80,
+              damping: 14,
+            }}
             className="flex flex-col items-center"
           >
             {/* Image — center of this div = viewport center */}
@@ -626,18 +654,29 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
           return (
             <a
               href={link.url}
-              target={link.url.startsWith('mailto:') || link.isDownload ? undefined : '_blank'}
-              rel={link.url.startsWith('mailto:') || link.isDownload ? undefined : 'noopener noreferrer'}
+              target={
+                link.url.startsWith('mailto:') || link.isDownload
+                  ? undefined
+                  : '_blank'
+              }
+              rel={
+                link.url.startsWith('mailto:') || link.isDownload
+                  ? undefined
+                  : 'noopener noreferrer'
+              }
               download={link.isDownload ? '' : undefined}
               key={link.id}
-              ref={(el) => { nodeElemsRef.current[i] = el; }}
+              ref={(el) => {
+                nodeElemsRef.current[i] = el;
+              }}
               className="absolute top-0 left-0 z-30 cursor-grab active:cursor-grabbing block"
               style={{
                 touchAction: 'none',
                 willChange: 'transform',
                 opacity: 0,
                 scale: '0',
-                transition: 'opacity 0.4s ease, scale 0.5s cubic-bezier(.34,1.56,.64,1)',
+                transition:
+                  'opacity 0.4s ease, scale 0.5s cubic-bezier(.34,1.56,.64,1)',
               }}
               onPointerDown={(e) => handleNodePointerDown(e, i)}
               onPointerEnter={() => handlePointerEnter(i)}
