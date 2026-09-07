@@ -1,3 +1,5 @@
+import type { Locale } from '@/i18n/translations';
+
 export interface LinkItem {
   id: string;
   url: string;
@@ -24,9 +26,9 @@ export const links: LinkItem[] = [
   },
   {
     id: 'cv',
-    url: `${process.env.NODE_ENV === 'production' ? '/links' : ''}/ThomasPrudhommeCV.pdf`,
+    // Resolved per-locale by getLinkUrl below.
+    url: 'https://cv.thomastp.ch/cv-fr.pdf',
     icon: 'file',
-    isDownload: true,
   },
   {
     id: 'email',
@@ -41,3 +43,10 @@ export const links: LinkItem[] = [
     openInSelf: true,
   },
 ];
+
+export function getLinkUrl(link: LinkItem, locale: Locale): string {
+  if (link.id === 'cv') {
+    return `https://cv.thomastp.ch/cv-${locale}.pdf`;
+  }
+  return link.url;
+}

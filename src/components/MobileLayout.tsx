@@ -98,6 +98,7 @@ export default function MobileLayout({
             key={link.id}
             link={link}
             t={t}
+            locale={locale}
             index={i}
             variant="card"
             onDownload={onDownload}

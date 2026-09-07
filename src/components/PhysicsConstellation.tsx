@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { links } from '@/data/links';
+import { getLinkUrl, links } from '@/data/links';
 import type { Locale, Translations } from '@/i18n/translations';
 import GitHubStats from './GitHubStats';
 import { iconMap, MapPinIcon } from './Icons';
@@ -651,16 +651,17 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
         links.map((link, i) => {
           const Icon = iconMap[link.icon];
           const linkData = t.links[link.id as keyof typeof t.links];
+          const url = getLinkUrl(link, locale);
           return (
             <a
-              href={link.url}
+              href={url}
               target={
-                link.url.startsWith('mailto:') || link.isDownload
+                url.startsWith('mailto:') || link.isDownload
                   ? undefined
                   : '_blank'
               }
               rel={
-                link.url.startsWith('mailto:') || link.isDownload
+                url.startsWith('mailto:') || link.isDownload
                   ? undefined
                   : 'noopener noreferrer'
               }

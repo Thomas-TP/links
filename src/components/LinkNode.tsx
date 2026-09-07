@@ -1,13 +1,14 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import type { LinkItem } from '@/data/links';
-import type { Translations } from '@/i18n/translations';
+import { getLinkUrl, type LinkItem } from '@/data/links';
+import type { Locale, Translations } from '@/i18n/translations';
 import { DownloadIcon, ExternalLinkIcon, iconMap } from './Icons';
 
 interface LinkNodeProps {
   link: LinkItem;
   t: Translations;
+  locale: Locale;
   index: number;
   variant?: 'orbit' | 'card';
   onDownload?: (label: string) => void;
@@ -16,6 +17,7 @@ interface LinkNodeProps {
 export default function LinkNode({
   link,
   t,
+  locale,
   index,
   variant = 'orbit',
   onDownload,
@@ -24,6 +26,7 @@ export default function LinkNode({
   const linkData = t.links[link.id as keyof typeof t.links];
   const label = linkData.label;
   const desc = linkData.desc;
+  const url = getLinkUrl(link, locale);
   const openExternal = !link.isDownload && !link.openInSelf;
 
   const handleClick =
@@ -32,7 +35,7 @@ export default function LinkNode({
   if (variant === 'orbit') {
     return (
       <motion.a
-        href={link.url}
+        href={url}
         target={openExternal ? '_blank' : '_self'}
         rel={openExternal ? 'noopener noreferrer' : undefined}
         download={link.isDownload || undefined}
@@ -64,7 +67,7 @@ export default function LinkNode({
   // ─── Card variant (mobile) ───
   return (
     <motion.a
-      href={link.url}
+      href={url}
       target={openExternal ? '_blank' : '_self'}
       rel={openExternal ? 'noopener noreferrer' : undefined}
       download={link.isDownload || undefined}
