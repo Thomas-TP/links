@@ -4,6 +4,7 @@
  * le format standard le mieux supporté par WhatsApp, X, LinkedIn, Discord, Slack…
  * Usage: node scripts/generate-og.mjs
  */
+import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import QRCode from 'qrcode';
@@ -11,6 +12,13 @@ import sharp from 'sharp';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const pub = join(__dirname, '..', 'public');
+
+// The exact favicon markup, used verbatim as the QR code's center logo.
+const faviconInner = readFileSync(join(pub, 'favicon.svg'), 'utf-8')
+  .replace(/<\?xml[^>]*\?>/, '')
+  .replace(/<svg[^>]*>/, '')
+  .replace(/<\/svg>\s*$/, '')
+  .trim();
 
 const W = 1200;
 const H = 630;
@@ -56,7 +64,7 @@ function buildQrMarkup(url, { unit = 10, darkColor = '#09090b', lightColor = '#f
   const inFinder = (r, c) =>
     finderOrigins.some(([fr, fc]) => r >= fr && r < fr + 7 && c >= fc && c < fc + 7);
 
-  const logoSize = size >= 29 ? 7 : 5;
+  const logoSize = size >= 29 ? 9 : 7;
   const logoStart = Math.floor((size - logoSize) / 2);
   const inLogo = (r, c) =>
     r >= logoStart && r < logoStart + logoSize && c >= logoStart && c < logoStart + logoSize;
@@ -87,15 +95,13 @@ function buildQrMarkup(url, { unit = 10, darkColor = '#09090b', lightColor = '#f
   const logoOx = logoStart * unit;
   const logoOy = logoStart * unit;
   const logoPad = unit * 0.6;
-  const iconInset = logoPad + unit * 0.9;
+  const iconInset = logoPad + unit * 0.25;
   const iconSize = logoPx - iconInset * 2;
   const logo = `
     <rect x="${logoOx - logoPad}" y="${logoOy - logoPad}" width="${logoPx + logoPad * 2}" height="${logoPx + logoPad * 2}"
           rx="${unit * 1.6}" fill="${lightColor}"/>
-    <g transform="translate(${logoOx + iconInset}, ${logoOy + iconInset}) scale(${iconSize / 100})">
-      <rect width="100" height="100" rx="20" fill="${darkColor}"/>
-      <path d="M35 35H65M50 35V65" stroke="${lightColor}" stroke-width="8" stroke-linecap="round"/>
-      <circle cx="50" cy="50" r="40" stroke="${lightColor}" stroke-width="4" stroke-opacity="0.35"/>
+    <g transform="translate(${logoOx + iconInset}, ${logoOy + iconInset}) scale(${iconSize / 100})" fill="none">
+      ${faviconInner}
     </g>`;
 
   const span = size * unit;
@@ -103,11 +109,13 @@ function buildQrMarkup(url, { unit = 10, darkColor = '#09090b', lightColor = '#f
 }
 
 function background(copy, qr) {
-  const qrDisplayPx = 172;
-  const qrFrameSize = qrDisplayPx + 36;
-  const qrFrameX = 1030 - qrFrameSize / 2;
-  const qrFrameY = 310 - qrFrameSize / 2;
-  const qrInnerPad = 12;
+  const qrCenterX = 930;
+  const qrCenterY = 322;
+  const qrFrameSize = 380;
+  const qrInnerPad = 18;
+  const qrDisplayPx = qrFrameSize - qrInnerPad * 2 - 16;
+  const qrFrameX = qrCenterX - qrFrameSize / 2;
+  const qrFrameY = qrCenterY - qrFrameSize / 2;
 
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <defs>
@@ -173,7 +181,7 @@ function background(copy, qr) {
   <circle cx="1150" cy="90" r="1.4" fill="rgba(255,255,255,0.24)"/>
 
   <!-- Vertical divider before the QR column -->
-  <line x1="878" y1="80" x2="878" y2="${H - 80}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+  <line x1="700" y1="80" x2="700" y2="${H - 80}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
 
   <!-- Glow behind memoji -->
   <ellipse cx="180" cy="185" rx="190" ry="190" fill="url(#memojiGlow)"/>
@@ -211,11 +219,11 @@ function background(copy, qr) {
         fill="rgba(16,185,129,0.88)">${esc(copy.available)}</text>
 
   <!-- Scan label -->
-  <text x="1030" y="${qrFrameY - 24}" text-anchor="middle" font-family="${FONT_BODY}" font-size="14"
+  <text x="${qrCenterX}" y="${qrFrameY - 24}" text-anchor="middle" font-family="${FONT_BODY}" font-size="15"
         font-weight="600" letter-spacing="1" fill="rgba(255,255,255,0.45)">${esc(copy.scan.toUpperCase())}</text>
 
   <!-- QR glow + gradient frame -->
-  <ellipse cx="1030" cy="310" rx="150" ry="150" fill="url(#qrGlow)"/>
+  <ellipse cx="${qrCenterX}" cy="${qrCenterY}" rx="240" ry="240" fill="url(#qrGlow)"/>
   <rect x="${qrFrameX}" y="${qrFrameY}" width="${qrFrameSize}" height="${qrFrameSize}" rx="24"
         fill="none" stroke="url(#qrFrameGrad)" stroke-width="2.5" opacity="0.85"/>
   <rect x="${qrFrameX + qrInnerPad}" y="${qrFrameY + qrInnerPad}"
@@ -228,7 +236,7 @@ function background(copy, qr) {
   </g>
 
   <!-- Domain -->
-  <text x="1030" y="${qrFrameY + qrFrameSize + 40}" text-anchor="middle" font-family="${FONT}" font-size="18"
+  <text x="${qrCenterX}" y="${qrFrameY + qrFrameSize + 42}" text-anchor="middle" font-family="${FONT}" font-size="20"
         font-weight="700" fill="rgba(255,255,255,0.85)" letter-spacing="-0.2">links.thomastp.ch</text>
 </svg>`;
 }
