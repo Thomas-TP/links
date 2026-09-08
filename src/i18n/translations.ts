@@ -2,7 +2,7 @@ export const translations = {
   fr: {
     title: "Thomas Prud'homme",
     subtitle: 'Apprenti CFC Informaticien',
-    subtitleDetail: 'Exploitation & Infrastructure · 2ème année',
+    subtitleDetail: 'Exploitation & Infrastructure · 3ème année',
     location: 'Arc lémanique, Suisse',
     available: 'Disponible dès juillet 2026',
     links: {
@@ -26,7 +26,7 @@ export const translations = {
   en: {
     title: "Thomas Prud'homme",
     subtitle: 'IT Apprentice (CFC)',
-    subtitleDetail: 'Operations & Infrastructure · 2nd year',
+    subtitleDetail: 'Operations & Infrastructure · 3rd year',
     location: 'Lake Geneva region, Switzerland',
     available: 'Available from July 2026',
     links: {

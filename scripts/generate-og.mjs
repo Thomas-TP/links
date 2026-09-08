@@ -21,17 +21,17 @@ const FONT_BODY = "'DM Sans',Segoe UI,system-ui,-apple-system,sans-serif";
 const COPY = {
   fr: {
     subtitle: 'Apprenti CFC Informaticien',
-    detail: 'Exploitation & Infrastructure · 2ème année',
+    detail: 'Exploitation & Infrastructure · 3ème année',
     location: 'Arc lémanique, Suisse',
-    available: 'Disponible dès juillet 2026',
+    available: 'Disponible',
     scan: 'Scanner pour visiter',
     out: 'og-image.png',
   },
   en: {
     subtitle: 'IT Apprentice (CFC)',
-    detail: 'Operations & Infrastructure · 2nd year',
+    detail: 'Operations & Infrastructure · 3rd year',
     location: 'Lake Geneva region, Switzerland',
-    available: 'Available from July 2026',
+    available: 'Available',
     scan: 'Scan to visit',
     out: 'og-image-en.png',
   },
@@ -41,7 +41,74 @@ function esc(s) {
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 }
 
-function background(copy) {
+/* ── Custom "styled" QR code: rounded dots, rounded finder eyes, logo hole ── */
+
+function buildQrMarkup(url, { unit = 10, darkColor = '#09090b', lightColor = '#fafafa' } = {}) {
+  const qr = QRCode.create(url, { errorCorrectionLevel: 'H' });
+  const size = qr.modules.size;
+  const get = (r, c) => qr.modules.get(r, c) === 1;
+
+  const finderOrigins = [
+    [0, 0],
+    [0, size - 7],
+    [size - 7, 0],
+  ];
+  const inFinder = (r, c) =>
+    finderOrigins.some(([fr, fc]) => r >= fr && r < fr + 7 && c >= fc && c < fc + 7);
+
+  const logoSize = size >= 29 ? 7 : 5;
+  const logoStart = Math.floor((size - logoSize) / 2);
+  const inLogo = (r, c) =>
+    r >= logoStart && r < logoStart + logoSize && c >= logoStart && c < logoStart + logoSize;
+
+  let dots = '';
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (inFinder(r, c) || inLogo(r, c)) continue;
+      if (!get(r, c)) continue;
+      const cx = (c + 0.5) * unit;
+      const cy = (r + 0.5) * unit;
+      dots += `<circle cx="${cx}" cy="${cy}" r="${unit * 0.48}" fill="${darkColor}"/>`;
+    }
+  }
+
+  let eyes = '';
+  for (const [fr, fc] of finderOrigins) {
+    const ox = fc * unit;
+    const oy = fr * unit;
+    eyes += `
+      <rect x="${ox}" y="${oy}" width="${7 * unit}" height="${7 * unit}" rx="${unit * 2}" fill="${darkColor}"/>
+      <rect x="${ox + unit}" y="${oy + unit}" width="${5 * unit}" height="${5 * unit}" rx="${unit * 1.4}" fill="${lightColor}"/>
+      <rect x="${ox + 2 * unit}" y="${oy + 2 * unit}" width="${3 * unit}" height="${3 * unit}" rx="${unit}" fill="${darkColor}"/>`;
+  }
+
+  // Logo hole: white rounded backing + the favicon mark, in module-grid coordinates.
+  const logoPx = logoSize * unit;
+  const logoOx = logoStart * unit;
+  const logoOy = logoStart * unit;
+  const logoPad = unit * 0.6;
+  const iconInset = logoPad + unit * 0.9;
+  const iconSize = logoPx - iconInset * 2;
+  const logo = `
+    <rect x="${logoOx - logoPad}" y="${logoOy - logoPad}" width="${logoPx + logoPad * 2}" height="${logoPx + logoPad * 2}"
+          rx="${unit * 1.6}" fill="${lightColor}"/>
+    <g transform="translate(${logoOx + iconInset}, ${logoOy + iconInset}) scale(${iconSize / 100})">
+      <rect width="100" height="100" rx="20" fill="${darkColor}"/>
+      <path d="M35 35H65M50 35V65" stroke="${lightColor}" stroke-width="8" stroke-linecap="round"/>
+      <circle cx="50" cy="50" r="40" stroke="${lightColor}" stroke-width="4" stroke-opacity="0.35"/>
+    </g>`;
+
+  const span = size * unit;
+  return { markup: dots + eyes + logo, span };
+}
+
+function background(copy, qr) {
+  const qrDisplayPx = 172;
+  const qrFrameSize = qrDisplayPx + 36;
+  const qrFrameX = 1030 - qrFrameSize / 2;
+  const qrFrameY = 310 - qrFrameSize / 2;
+  const qrInnerPad = 12;
+
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}">
   <defs>
     <radialGradient id="bgGrad" cx="35%" cy="0%" r="100%">
@@ -61,9 +128,18 @@ function background(copy) {
       <stop offset="55%"  stop-color="#7c3aed" stop-opacity="0.08"/>
       <stop offset="100%" stop-color="#09090b" stop-opacity="0"/>
     </radialGradient>
+    <radialGradient id="qrGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#06b6d4" stop-opacity="0.25"/>
+      <stop offset="60%"  stop-color="#7c3aed" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#09090b" stop-opacity="0"/>
+    </radialGradient>
     <linearGradient id="accentBar" x1="0%" y1="0%" x2="100%" y2="0%">
       <stop offset="0%"   stop-color="#7c3aed"/>
       <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+    <linearGradient id="qrFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#22d3ee"/>
     </linearGradient>
   </defs>
 
@@ -93,10 +169,10 @@ function background(copy) {
   <circle cx="700" cy="180" r="1.3" fill="rgba(255,255,255,0.22)"/>
   <circle cx="640" cy="480" r="1.6" fill="rgba(255,255,255,0.20)"/>
   <circle cx="470" cy="560" r="1.3" fill="rgba(255,255,255,0.18)"/>
-  <circle cx="950" cy="60"  r="1.5" fill="rgba(255,255,255,0.28)"/>
-  <circle cx="1090" cy="530" r="1.6" fill="rgba(255,255,255,0.22)"/>
+  <circle cx="850" cy="560" r="1.5" fill="rgba(255,255,255,0.22)"/>
+  <circle cx="1150" cy="90" r="1.4" fill="rgba(255,255,255,0.24)"/>
 
-  <!-- Vertical divider before the QR card -->
+  <!-- Vertical divider before the QR column -->
   <line x1="878" y1="80" x2="878" y2="${H - 80}" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
 
   <!-- Glow behind memoji -->
@@ -134,22 +210,34 @@ function background(copy) {
   <text x="113" y="552" font-family="${FONT_BODY}" font-size="16"
         fill="rgba(16,185,129,0.88)">${esc(copy.available)}</text>
 
-  <!-- QR card -->
-  <rect x="928" y="145" width="204" height="340" rx="22" fill="#fafafa"/>
-  <rect x="928.5" y="145.5" width="203" height="339" rx="21.5" fill="none" stroke="rgba(0,0,0,0.06)"/>
-  <text x="1030" y="182" text-anchor="middle" font-family="${FONT_BODY}" font-size="13.5"
-        font-weight="600" letter-spacing="0.5" fill="#3f3f46">${esc(copy.scan.toUpperCase())}</text>
+  <!-- Scan label -->
+  <text x="1030" y="${qrFrameY - 24}" text-anchor="middle" font-family="${FONT_BODY}" font-size="14"
+        font-weight="600" letter-spacing="1" fill="rgba(255,255,255,0.45)">${esc(copy.scan.toUpperCase())}</text>
+
+  <!-- QR glow + gradient frame -->
+  <ellipse cx="1030" cy="310" rx="150" ry="150" fill="url(#qrGlow)"/>
+  <rect x="${qrFrameX}" y="${qrFrameY}" width="${qrFrameSize}" height="${qrFrameSize}" rx="24"
+        fill="none" stroke="url(#qrFrameGrad)" stroke-width="2.5" opacity="0.85"/>
+  <rect x="${qrFrameX + qrInnerPad}" y="${qrFrameY + qrInnerPad}"
+        width="${qrFrameSize - qrInnerPad * 2}" height="${qrFrameSize - qrInnerPad * 2}" rx="16"
+        fill="#fafafa"/>
+
+  <!-- QR code -->
+  <g transform="translate(${qrFrameX + (qrFrameSize - qrDisplayPx) / 2}, ${qrFrameY + (qrFrameSize - qrDisplayPx) / 2}) scale(${qrDisplayPx / qr.span})">
+    ${qr.markup}
+  </g>
 
   <!-- Domain -->
-  <text x="1030" y="453" text-anchor="middle" font-family="${FONT}" font-size="16.5"
-        font-weight="700" fill="#18181b" letter-spacing="-0.2">links.thomastp.ch</text>
+  <text x="1030" y="${qrFrameY + qrFrameSize + 40}" text-anchor="middle" font-family="${FONT}" font-size="18"
+        font-weight="700" fill="rgba(255,255,255,0.85)" letter-spacing="-0.2">links.thomastp.ch</text>
 </svg>`;
 }
 
 async function buildVariant(locale) {
   const copy = COPY[locale];
+  const qr = buildQrMarkup(SITE_URL);
 
-  const bgBuffer = await sharp(Buffer.from(background(copy)))
+  const bgBuffer = await sharp(Buffer.from(background(copy, qr)))
     .png()
     .toBuffer();
 
@@ -162,20 +250,8 @@ async function buildVariant(locale) {
     .png()
     .toBuffer();
 
-  const qrSize = 168;
-  const qrBuffer = await QRCode.toBuffer(SITE_URL, {
-    type: 'png',
-    width: qrSize,
-    margin: 1,
-    errorCorrectionLevel: 'M',
-    color: { dark: '#09090bff', light: '#fafafaff' },
-  });
-
   await sharp(bgBuffer)
-    .composite([
-      { input: memojiBuffer, left: 60, top: 65 },
-      { input: qrBuffer, left: 1030 - qrSize / 2, top: 205 },
-    ])
+    .composite([{ input: memojiBuffer, left: 60, top: 65 }])
     .png({ compressionLevel: 9 })
     .toFile(join(pub, copy.out));
 
