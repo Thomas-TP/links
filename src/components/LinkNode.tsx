@@ -1,7 +1,8 @@
 import { motion } from 'motion/react';
+import type { MouseEvent } from 'react';
 import { getLinkUrl, type LinkItem } from '@/data/links';
 import type { Locale, Translations } from '@/i18n/translations';
-import { DownloadIcon, ExternalLinkIcon, iconMap } from './Icons';
+import { CopyIcon, DownloadIcon, ExternalLinkIcon, iconMap } from './Icons';
 
 interface LinkNodeProps {
   link: LinkItem;
@@ -10,6 +11,7 @@ interface LinkNodeProps {
   index: number;
   variant?: 'orbit' | 'card';
   onDownload?: (label: string) => void;
+  onCopyEmail?: (email: string) => void;
 }
 
 export default function LinkNode({
@@ -19,6 +21,7 @@ export default function LinkNode({
   index,
   variant = 'orbit',
   onDownload,
+  onCopyEmail,
 }: LinkNodeProps) {
   const Icon = iconMap[link.icon];
   const linkData = t.links[link.id as keyof typeof t.links];
@@ -26,8 +29,15 @@ export default function LinkNode({
   const desc = linkData.desc;
   const url = getLinkUrl(link, locale);
   const openExternal = !link.isDownload && !link.openInSelf;
+  const isEmail = link.id === 'email';
 
   const handleClick = link.isDownload && onDownload ? () => onDownload(label) : undefined;
+
+  const handleCopyClick = (e: MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onCopyEmail?.(url.replace('mailto:', ''));
+  };
 
   if (variant === 'orbit') {
     return (
@@ -96,6 +106,20 @@ export default function LinkNode({
               {desc}
             </div>
           </div>
+
+          {/* Copy button (email only) */}
+          {isEmail && onCopyEmail && (
+            <button
+              type="button"
+              onClick={handleCopyClick}
+              onPointerDown={(e) => e.stopPropagation()}
+              aria-label={locale === 'fr' ? "Copier l'adresse email" : 'Copy email address'}
+              title={locale === 'fr' ? "Copier l'adresse email" : 'Copy email address'}
+              className="relative z-10 flex-shrink-0 p-2 -m-2 rounded-lg text-zinc-400 dark:text-zinc-500 hover:text-black dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            >
+              <CopyIcon className="w-4 h-4" />
+            </button>
+          )}
 
           {/* Arrow */}
           {link.isDownload ? (

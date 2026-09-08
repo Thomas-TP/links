@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { getLinkUrl, links } from '@/data/links';
 import type { Locale, Translations } from '@/i18n/translations';
 import GitHubStats from './GitHubStats';
-import { iconMap, MapPinIcon } from './Icons';
+import { CopyIcon, iconMap, MapPinIcon } from './Icons';
 
 /* ───────────────────── Types ───────────────────── */
 
@@ -74,9 +74,10 @@ interface Props {
   t: Translations;
   locale: Locale;
   onDownload?: (label: string) => void;
+  onCopyEmail?: (email: string) => void;
 }
 
-export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
+export default function PhysicsConstellation({ t, locale, onDownload, onCopyEmail }: Props) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const nodeElemsRef = useRef<(HTMLAnchorElement | HTMLDivElement | null)[]>([]);
@@ -669,6 +670,22 @@ export default function PhysicsConstellation({ t, locale, onDownload }: Props) {
                     <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-600 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-shimmer pointer-events-none" />
                   </div>
                 </div>
+                {link.id === 'email' && onCopyEmail && (
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onCopyEmail(url.replace('mailto:', ''));
+                    }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    aria-label={locale === 'fr' ? "Copier l'adresse email" : 'Copy email address'}
+                    title={locale === 'fr' ? "Copier l'adresse email" : 'Copy email address'}
+                    className="absolute -top-1.5 -right-1.5 z-10 p-1.5 rounded-full bg-white dark:bg-zinc-900 border border-gray-200/60 dark:border-white/10 shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-zinc-500 dark:text-zinc-400 hover:text-black dark:hover:text-white"
+                  >
+                    <CopyIcon className="w-3.5 h-3.5" />
+                  </button>
+                )}
                 <span className="text-sm font-semibold text-gray-600 dark:text-white/70 group-hover:text-zinc-600 dark:text-zinc-400 dark:group-hover:text-accent-cyan transition-colors whitespace-nowrap font-heading pointer-events-none select-none">
                   {linkData.label}
                 </span>

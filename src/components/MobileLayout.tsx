@@ -9,9 +9,10 @@ interface MobileLayoutProps {
   t: Translations;
   locale: Locale;
   onDownload?: (label: string) => void;
+  onCopyEmail?: (email: string) => void;
 }
 
-export default function MobileLayout({ t, locale, onDownload }: MobileLayoutProps) {
+export default function MobileLayout({ t, locale, onDownload, onCopyEmail }: MobileLayoutProps) {
   return (
     <div className="relative z-10 min-h-screen flex flex-col items-center px-6 py-12 gap-8">
       {/* Ambient gradients */}
@@ -90,6 +91,7 @@ export default function MobileLayout({ t, locale, onDownload }: MobileLayoutProp
             index={i}
             variant="card"
             onDownload={onDownload}
+            onCopyEmail={onCopyEmail}
           />
         ))}
       </motion.div>

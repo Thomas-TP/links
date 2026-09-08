@@ -1,12 +1,23 @@
 import { useEffect, useState } from 'react';
 import { type Locale, type Translations, translations } from './translations';
 
-export function useLocale(): {
+/**
+ * Maps a BCP-47 navigator.language tag to a supported Locale.
+ * 'en', 'de', 'it' → English (better than French for these speakers).
+ * everything else (fr, es, pt…) → French.
+ */
+export function detectLocaleFromNavigatorLanguage(language: string): Locale {
+  const lang = language.toLowerCase();
+  const useEnglish = lang.startsWith('en') || lang.startsWith('de') || lang.startsWith('it');
+  return useEnglish ? 'en' : 'fr';
+}
+
+export function useLocale(initialLocale?: Locale): {
   locale: Locale;
   setLocale: (l: Locale) => void;
   t: Translations;
 } {
-  const [locale, setLocale] = useState<Locale>('fr');
+  const [locale, setLocale] = useState<Locale>(initialLocale ?? 'fr');
 
   useEffect(() => {
     // 1. Check for manual override in localStorage
@@ -17,17 +28,17 @@ export function useLocale(): {
       return;
     }
 
-    // 2. Fall back to automatic detection
-    // 'en', 'de', 'it' → English (better than French for these speakers)
-    // everything else (fr, es, pt…) → French
-    const lang = navigator.language.toLowerCase();
-    const useEnglish = lang.startsWith('en') || lang.startsWith('de') || lang.startsWith('it');
-    if (useEnglish) {
-      setLocale('en');
+    // 2. Respect the entry route's language (e.g. /en), if any
+    if (initialLocale) {
+      document.documentElement.lang = initialLocale;
+      return;
     }
-    // Update html lang attribute
-    document.documentElement.lang = useEnglish ? 'en' : 'fr';
-  }, []);
+
+    // 3. Fall back to automatic detection from the browser
+    const detected = detectLocaleFromNavigatorLanguage(navigator.language);
+    setLocale(detected);
+    document.documentElement.lang = detected;
+  }, [initialLocale]);
 
   return { locale, setLocale, t: translations[locale] };
 }

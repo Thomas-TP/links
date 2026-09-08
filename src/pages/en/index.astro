@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '@fontsource/outfit/400.css';
 import '@fontsource/outfit/500.css';
 import '@fontsource/outfit/600.css';
@@ -8,18 +9,18 @@ import '@fontsource/dm-sans/400.css';
 import '@fontsource/dm-sans/500.css';
 import '@fontsource/dm-sans/600.css';
 import '@fontsource/dm-sans/700.css';
-import { ClientRouter } from 'astro:transitions';
-import Home from '../components/Home';
-import '../styles/global.css';
+import Home from '../../components/Home';
+import '../../styles/global.css';
 
 const title = "Thomas Prud'homme — Links & Portfolio";
 const description =
-  "Apprenti CFC Informaticien en Exploitation & Infrastructure, basé dans l'Arc lémanique. Découvre mes projets, compétences et moyens de contact.";
-const ogTitle = "Thomas Prud'homme — Apprenti CFC Informaticien";
-const canonicalUrl = 'https://links.thomastp.ch';
+  'IT Apprentice (CFC) in Operations & Infrastructure, based in the Lake Geneva region, Switzerland. Check out my projects, skills, and ways to get in touch.';
+const ogTitle = "Thomas Prud'homme — IT Apprentice (CFC)";
+const canonicalUrl = 'https://links.thomastp.ch/en';
+const frUrl = 'https://links.thomastp.ch';
 ---
 
-<html lang="fr">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,16 +29,16 @@ const canonicalUrl = 'https://links.thomastp.ch';
     <meta name="description" content={description} />
     <meta
       name="keywords"
-      content="informaticien, CFC, apprenti, infrastructure, Suisse, Thomas Prud'homme"
+      content="IT, apprentice, CFC, infrastructure, Switzerland, Thomas Prud'homme"
     />
 
     <!-- OpenGraph -->
     <meta property="og:title" content={ogTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="fr_CH" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:url" content={canonicalUrl} />
-    <meta property="og:image" content={`${canonicalUrl}/og-image.png`} />
+    <meta property="og:image" content={`${frUrl}/og-image-en.png`} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogTitle} />
@@ -46,12 +47,12 @@ const canonicalUrl = 'https://links.thomastp.ch';
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={ogTitle} />
     <meta name="twitter:description" content={description} />
-    <meta name="twitter:image" content={`${canonicalUrl}/og-image.png`} />
+    <meta name="twitter:image" content={`${frUrl}/og-image-en.png`} />
 
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="alternate" hreflang="fr" href={canonicalUrl} />
-    <link rel="alternate" hreflang="en" href={`${canonicalUrl}/en`} />
-    <link rel="alternate" hreflang="x-default" href={canonicalUrl} />
+    <link rel="alternate" hreflang="en" href={canonicalUrl} />
+    <link rel="alternate" hreflang="fr" href={frUrl} />
+    <link rel="alternate" hreflang="x-default" href={frUrl} />
 
     <!-- Favicons: light/dark variants switched via prefers-color-scheme -->
     <link
@@ -79,6 +80,6 @@ const canonicalUrl = 'https://links.thomastp.ch';
     </script>
   </head>
   <body class="antialiased">
-    <Home client:load />
+    <Home client:load initialLocale="en" />
   </body>
 </html>

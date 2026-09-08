@@ -5,16 +5,33 @@ import MobileLayout from '@/components/MobileLayout';
 import PhysicsConstellation from '@/components/PhysicsConstellation';
 import Starfield from '@/components/Starfield';
 import { ToastContainer, useToast } from '@/components/Toast';
+import type { Locale } from '@/i18n/translations';
 import { useLocale } from '@/i18n/useLocale';
 
-export default function Home() {
-  const { t, locale, setLocale } = useLocale();
+interface HomeProps {
+  initialLocale?: Locale;
+}
+
+export default function Home({ initialLocale }: HomeProps) {
+  const { t, locale, setLocale } = useLocale(initialLocale);
   const [mounted, setMounted] = useState(false);
   const { toasts, show: showToast } = useToast();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleCopyEmail = (email: string) => {
+    navigator.clipboard
+      ?.writeText(email)
+      .then(() => {
+        showToast(locale === 'fr' ? 'Email copié !' : 'Email copied!');
+      })
+      .catch(() => {
+        // Clipboard permission denied — fall back to showing the address itself.
+        showToast(email);
+      });
+  };
 
   if (!mounted) {
     return (
@@ -76,6 +93,7 @@ export default function Home() {
                   : `${label} — download started`,
               )
             }
+            onCopyEmail={handleCopyEmail}
           />
         </div>
 
@@ -91,6 +109,7 @@ export default function Home() {
                   : `${label} — download started`,
               )
             }
+            onCopyEmail={handleCopyEmail}
           />
         </div>
 
